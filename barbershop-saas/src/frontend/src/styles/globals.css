@@ -1,0 +1,353 @@
+/* src/frontend/src/styles/globals.css */
+
+/**
+ * ESTILOS GLOBALES
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --primary-light: #3b82f6;
+  --secondary: #64748b;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-light: #94a3b8;
+  
+  --border-color: #e2e8f0;
+  --border-radius: 8px;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
+  --transition: all 0.3s ease;
+}
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* Tipografía */
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* Botones */
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-secondary);
+}
+
+.btn-small {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  border: none;
+  background-color: var(--primary);
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-small:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+.btn-logout {
+  width: 100%;
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 1rem;
+}
+
+.btn-logout:hover {
+  background-color: #dc2626;
+}
+
+/* Formularios */
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+input.input-error, select.input-error {
+  border-color: var(--danger);
+}
+
+input.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+input:disabled, select:disabled {
+  background-color: var(--bg-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Badges */
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-blue {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-green {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.badge-red {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-yellow {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-gray {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+/* Mensajes */
+
+.error-banner {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--danger);
+}
+
+.success-banner {
+  background-color: #dcfce7;
+  color: #15803d;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--success);
+}
+
+.field-error {
+  display: block;
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Loading */
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+.loading::after {
+  content: '.';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60% {
+    content: '...';
+  }
+}
+
+/* Empty State */
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+}
+
+.empty-state p {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+/* Tables */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: var(--bg-tertiary);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+/* Utilities */
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
+
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }

@@ -1,0 +1,151 @@
+/* src/frontend/src/styles/layout.css */
+
+/**
+ * ESTILOS: Layout Principal
+ */
+
+.layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+/* Sidebar */
+
+.sidebar {
+  background-color: #1e293b;
+  color: white;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1.5rem 0;
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+  border-left-color: #3b82f6;
+}
+
+.nav-item.active {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: white;
+  border-left-color: #3b82f6;
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  min-width: 1.5rem;
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-card {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.user-avatar {
+  font-size: 2rem;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: 600;
+  margin: 0;
+  color: white;
+  font-size: 0.95rem;
+}
+
+.user-role {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  text-transform: capitalize;
+}
+
+/* Main Content */
+
+.main-content {
+  background-color: #f8fafc;
+  overflow-y: auto;
+}
+
+.content-wrapper {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .content-wrapper {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .content-wrapper {
+    padding: 0.75rem;
+  }
+}

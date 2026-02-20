@@ -1,0 +1,352 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================
+// NÚCLEO OPERATIVO
+// ============================================
+
+/// Tabla de negocios (tenants)
+model Negocio {
+  id            String      @id @default(uuid())
+  nombre        String      @db.VarChar(255)
+  fecha_creacion DateTime   @default(now())
+  estado        String      @default("activo") // activo, suspendido, eliminado
+  
+  // Relaciones
+  sucursales    Sucursal[]
+  roles         Rol[]
+  usuarios      Usuario[]
+  clientes      Cliente[]
+  citas         Cita[]
+  pagos         Pago[]
+  suscripciones Suscripcion[]
+  activity_logs ActivityLog[]
+
+  @@index([estado])
+}
+
+/// Tabla de sucursales
+model Sucursal {
+  id                String      @id @default(uuid())
+  negocio_id        String
+  nombre            String      @db.VarChar(255)
+  direccion         String      @db.VarChar(500)
+  telefono          String      @db.VarChar(20)
+  horario_apertura  DateTime    @db.Time()
+  horario_cierre    DateTime    @db.Time()
+  activa            Boolean     @default(true)
+  
+  // Relaciones
+  negocio           Negocio     @relation(fields: [negocio_id], references: [id], onDelete: Cascade)
+  usuarios          Usuario[]
+  empleados         Empleado[]
+  servicios         Servicio[]
+  clientes          Cliente[]
+  citas             Cita[]
+
+  @@index([negocio_id])
+  @@index([activa])
+}
+
+/// Tabla de roles
+model Rol {
+  id            String      @id @default(uuid())
+  negocio_id    String
+  nombre        String      @db.VarChar(50) // owner, recepcionista, barbero, limpieza
+  descripcion   String      @db.VarChar(255)
+  activo        Boolean     @default(true)
+  
+  // Relaciones
+  negocio       Negocio     @relation(fields: [negocio_id], references: [id], onDelete: Cascade)
+  usuarios      Usuario[]
+
+  @@unique([negocio_id, nombre])
+  @@index([negocio_id])
+}
+
+/// Tabla de usuarios
+model Usuario {
+  id                String      @id @default(uuid())
+  negocio_id        String
+  sucursal_id       String?
+  rol_id            String
+  nombre            String      @db.VarChar(255)
+  email             String      @db.VarChar(255)
+  password_hash     String      @db.VarChar(255)
+  es_super_admin    Boolean     @default(false)
+  activo            Boolean     @default(true)
+  fecha_creacion    DateTime    @default(now())
+  
+  // Relaciones
+  negocio           Negocio     @relation(fields: [negocio_id], references: [id], onDelete: Cascade)
+  sucursal          Sucursal?   @relation(fields: [sucursal_id], references: [id], onDelete: SetNull)
+  rol               Rol         @relation(fields: [rol_id], references: [id], onDelete: Restrict)
+  empleado          Empleado?
+  citas_creadas     Cita[]      @relation("CitasCreadas")
+  activity_logs     ActivityLog[]
+
+  @@unique([email])
+  @@index([negocio_id])
+  @@index([sucursal_id])
+  @@index([email])
+  @@index([activo])
+}
+
+/// Tabla de empleados (barberos, estilistas)
+model Empleado {
+  id                    String      @id @default(uuid())
+  usuario_id            String      @unique
+  sucursal_id           String
+  porcentaje_comision   Decimal     @db.Decimal(5, 2) @default(0)
+  activo                Boolean     @default(true)
+  
+  // Relaciones
+  usuario               Usuario     @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  sucursal              Sucursal    @relation(fields: [sucursal_id], references: [id], onDelete: Cascade)
+  citas                 Cita[]
+  propinas              Propina[]
+  comisiones            Comision[]
+  disponibilidades      Disponibilidad[]
+
+  @@index([sucursal_id])
+  @@index([activo])
+}
+
+/// Tabla de disponibilidad de empleados
+model Disponibilidad {
+  id            String      @id @default(uuid())
+  empleado_id   String
+  dia_semana    Int         @db.SmallInt // 0-6 (lunes-domingo)
+  hora_inicio   DateTime    @db.Time()
+  hora_fin      DateTime    @db.Time()
+  activa        Boolean     @default(true)
+  
+  // Relaciones
+  empleado      Empleado    @relation(fields: [empleado_id], references: [id], onDelete: Cascade)
+
+  @@index([empleado_id])
+  @@index([dia_semana])
+}
+
+/// Tabla de clientes
+model Cliente {
+  id                String      @id @default(uuid())
+  negocio_id        String
+  sucursal_id       String
+  nombre            String      @db.VarChar(255)
+  telefono          String      @db.VarChar(20)
+  fecha_nacimiento  DateTime?   @db.Date()
+  notas             String?     @db.Text()
+  fecha_registro    DateTime    @default(now())
+  activo            Boolean     @default(true)
+  
+  // Relaciones
+  negocio           Negocio     @relation(fields: [negocio_id], references: [id], onDelete: Cascade)
+  sucursal          Sucursal    @relation(fields: [sucursal_id], references: [id], onDelete: Cascade)
+  citas             Cita[]
+
+  @@index([negocio_id])
+  @@index([sucursal_id])
+  @@index([activo])
+}
+
+/// Tabla de servicios
+model Servicio {
+  id                String      @id @default(uuid())
+  sucursal_id       String
+  nombre            String      @db.VarChar(255)
+  precio_base       Decimal     @db.Decimal(10, 2)
+  duracion_minutos  Int
+  activo            Boolean     @default(true)
+  
+  // Relaciones
+  sucursal          Sucursal    @relation(fields: [sucursal_id], references: [id], onDelete: Cascade)
+  citas             Cita[]
+
+  @@index([sucursal_id])
+  @@index([activo])
+}
+
+/// Tabla de citas
+model Cita {
+  id              String      @id @default(uuid())
+  negocio_id      String
+  sucursal_id     String
+  cliente_id      String
+  empleado_id     String
+  servicio_id     String
+  fecha           DateTime    @db.Date()
+  hora_inicio     DateTime    @db.Time()
+  hora_fin        DateTime    @db.Time()
+  estado          String      @default("confirmada") // confirmada, en_proceso, finalizada, cancelada, no_asistio
+  creado_por      String
+  fecha_creacion  DateTime    @default(now())
+  activa          Boolean     @default(true)
+  
+  // Relaciones
+  negocio         Negocio     @relation(fields: [negocio_id], references: [id], onDelete: Cascade)
+  sucursal        Sucursal    @relation(fields: [sucursal_id], references: [id], onDelete: Cascade)
+  cliente         Cliente     @relation(fields: [cliente_id], references: [id], onDelete: Restrict)
+  empleado        Empleado    @relation(fields: [empleado_id], references: [id], onDelete: Restrict)
+  servicio        Servicio    @relation(fields: [servicio_id], references: [id], onDelete: Restrict)
+  usuario_creador Usuario     @relation("CitasCreadas", fields: [creado_por], references: [id], onDelete: Restrict)
+  pagos           Pago[]
+  propinas        Propina[]
+  comisiones      Comision[]
+
+  @@index([negocio_id])
+  @@index([sucursal_id])
+  @@index([empleado_id])
+  @@index([fecha])
+  @@index([estado])
+  @@index([negocio_id, fecha])
+}
+
+/// Tabla de pagos
+model Pago {
+  id              String      @id @default(uuid())
+  cita_id         String
+  negocio_id      String
+  precio_base     Decimal     @db.Decimal(10, 2)
+  precio_final    Decimal     @db.Decimal(10, 2)
+  metodo_pago     String      @db.VarChar(50) // efectivo, tarjeta, transferencia, cheque
+  fecha_pago      DateTime    @default(now())
+  activo          Boolean     @default(true)
+  
+  // Relaciones
+  cita            Cita        @relation(fields: [cita_id], references: [id], onDelete: Cascade)
+  negocio         Negocio     @relation(fields: [negocio_id], references: [id], onDelete: Cascade)
+
+  @@unique([cita_id])
+  @@index([cita_id])
+  @@index([fecha_pago])
+  @@index([negocio_id])
+}
+
+/// Tabla de propinas
+model Propina {
+  id              String      @id @default(uuid())
+  cita_id         String
+  empleado_id     String
+  monto           Decimal     @db.Decimal(10, 2)
+  fecha           DateTime    @default(now())
+  
+  // Relaciones
+  cita            Cita        @relation(fields: [cita_id], references: [id], onDelete: Cascade)
+  empleado        Empleado    @relation(fields: [empleado_id], references: [id], onDelete: Restrict)
+
+  @@index([cita_id])
+  @@index([empleado_id])
+  @@index([fecha])
+}
+
+/// Tabla de comisiones
+model Comision {
+  id                  String      @id @default(uuid())
+  cita_id             String
+  empleado_id         String
+  monto               Decimal     @db.Decimal(10, 2)
+  porcentaje_aplicado Decimal     @db.Decimal(5, 2)
+  fecha               DateTime    @default(now())
+  
+  // Relaciones
+  cita                Cita        @relation(fields: [cita_id], references: [id], onDelete: Cascade)
+  empleado            Empleado    @relation(fields: [empleado_id], references: [id], onDelete: Restrict)
+
+  @@index([cita_id])
+  @@index([empleado_id])
+  @@index([fecha])
+}
+
+// ============================================
+// NÚCLEO SaaS (Monetización)
+// ============================================
+
+/// Tabla de planes de suscripción
+model Plan {
+  id                      String      @id @default(uuid())
+  nombre                  String      @db.VarChar(50)
+  precio_mensual          Decimal     @db.Decimal(10, 2)
+  precio_anual            Decimal     @db.Decimal(10, 2)
+  limite_empleados        Int         @default(5)
+  limite_sucursales       Int         @default(1)
+  limite_citas_mensuales  Int         @default(500)
+  almacenamiento_mb       Int         @default(100)
+  activo                  Boolean     @default(true)
+  
+  // Relaciones
+  suscripciones           Suscripcion[]
+
+  @@index([activo])
+}
+
+/// Tabla de suscripciones
+model Suscripcion {
+  id              String      @id @default(uuid())
+  negocio_id      String
+  plan_id         String
+  fecha_inicio    DateTime    @default(now())
+  fecha_fin       DateTime
+  estado          String      @default("pendiente_pago") // pendiente_pago, activa, vencida, suspendida, cancelada
+  auto_renovar    Boolean     @default(true)
+  
+  // Relaciones
+  negocio         Negocio     @relation(fields: [negocio_id], references: [id], onDelete: Cascade)
+  plan            Plan        @relation(fields: [plan_id], references: [id], onDelete: Restrict)
+  pagos           PagoSuscripcion[]
+
+  @@unique([negocio_id])
+  @@index([negocio_id])
+  @@index([estado])
+}
+
+/// Tabla de pagos de suscripción
+model PagoSuscripcion {
+  id              String      @id @default(uuid())
+  suscripcion_id  String
+  monto           Decimal     @db.Decimal(10, 2)
+  metodo_pago     String      @db.VarChar(50)
+  fecha_pago      DateTime    @default(now())
+  estado          String      @default("completado") // completado, pendiente, fallido
+  
+  // Relaciones
+  suscripcion     Suscripcion @relation(fields: [suscripcion_id], references: [id], onDelete: Cascade)
+
+  @@index([suscripcion_id])
+  @@index([fecha_pago])
+}
+
+// ============================================
+// SEGURIDAD Y TRAZABILIDAD
+// ============================================
+
+/// Tabla de logs de actividad
+model ActivityLog {
+  id              String      @id @default(uuid())
+  negocio_id      String
+  usuario_id      String
+  entidad         String      @db.VarChar(50) // Usuario, Cita, Pago, etc.
+  entidad_id      String      // ID del registro modificado
+  accion          String      @db.VarChar(50) // CREATE, UPDATE, DELETE, READ
+  fecha           DateTime    @default(now())
+  detalles        String?     @db.Text() // JSON con cambios
+  
+  // Relaciones
+  negocio         Negocio     @relation(fields: [negocio_id], references: [id], onDelete: Cascade)
+  usuario         Usuario     @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
+
+  @@index([negocio_id])
+  @@index([usuario_id])
+  @@index([fecha])
+  @@index([entidad])
+}
