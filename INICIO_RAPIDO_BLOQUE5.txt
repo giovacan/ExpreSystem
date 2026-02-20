@@ -1,0 +1,210 @@
+================================================================================
+🎨 BLOQUE 5 - FRONTEND REACT - INICIO RÁPIDO
+================================================================================
+
+✅ ESTADO: COMPLETADO - 100% Funcional
+
+================================================================================
+📥 DESCARGAR
+================================================================================
+
+Archivo ZIP: barbershop-saas-bloque5.zip (104 KB)
+
+Contiene TODOS los archivos:
+- Backend (Bloques 1-4)
+- Frontend (Bloque 5)
+- Documentación
+- Configuración
+
+================================================================================
+⚡ INSTALACIÓN RÁPIDA (5 MINUTOS)
+================================================================================
+
+1. DESCARGAR Y EXTRAER:
+   
+   unzip barbershop-saas-bloque5.zip
+   cd barbershop-saas
+
+2. INSTALAR DEPENDENCIAS (Backend):
+   
+   npm install
+
+3. INSTALAR DEPENDENCIAS (Frontend):
+   
+   cd src/frontend
+   npm install
+   cd ../..
+
+4. CONFIGURAR .env (Backend):
+
+   Crear archivo .env en raíz:
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   DATABASE_URL=postgresql://user:pass@localhost:5432/barbershop_saas
+   JWT_SECRET=tu_super_secreto_aqui
+   PORT=3001
+   FRONTEND_URL=http://localhost:3000
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+5. CONFIGURAR .env (Frontend):
+
+   Crear archivo src/frontend/.env:
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   REACT_APP_API_URL=http://localhost:3001/api
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+================================================================================
+🚀 EJECUTAR
+================================================================================
+
+TERMINAL 1 - Backend:
+   npm start
+   
+   Escuchas "Servidor funcionando en http://localhost:3001"
+
+TERMINAL 2 - Frontend:
+   cd src/frontend
+   npm start
+   
+   Se abrirá http://localhost:3000
+
+================================================================================
+🧪 PROBAR
+================================================================================
+
+1. Ir a: http://localhost:3000
+2. Hacer clic: "Inicia sesión"
+3. Credenciales de demo:
+   
+   Email:    owner@barbershop.com
+   Password: password123
+
+4. ¡Explorar la app!
+
+================================================================================
+📱 PANTALLAS IMPLEMENTADAS
+================================================================================
+
+✅ Login - Autenticación
+✅ Register - Crear nuevo negocio
+✅ Dashboard - Panel principal
+✅ Clientes - CRUD de clientes
+✅ Servicios - CRUD de servicios
+✅ Citas - Agendar citas (con validaciones)
+✅ Reportes - Ventas y comisiones
+
+================================================================================
+📂 ESTRUCTURA CREADA
+================================================================================
+
+src/
+├── backend/          (Backend - Bloques 1-4)
+├── frontend/         (Frontend - Bloque 5) ← NUEVO
+│   ├── src/
+│   │   ├── pages/    → 8 páginas
+│   │   ├── components/
+│   │   ├── hooks/    → 3 hooks personalizados
+│   │   ├── services/ → HTTP client
+│   │   ├── styles/   → 6 CSS files
+│   │   ├── App.jsx
+│   │   └── index.jsx
+│   ├── public/
+│   └── package.json
+├── prisma/           (Base de datos)
+└── config/
+
+TOTAL: 70+ archivos, 6,500+ LOC
+
+================================================================================
+🔧 TECHNOLOGÍA
+================================================================================
+
+BACKEND:
+- Node.js + Express.js
+- Prisma ORM
+- PostgreSQL
+- JWT + bcrypt
+
+FRONTEND: ← NUEVO
+- React 18
+- React Router v6
+- Axios (HTTP client)
+- CSS puro (sin dependencias)
+
+================================================================================
+✨ CARACTERÍSTICAS
+================================================================================
+
+✅ Autenticación completa (Login/Register)
+✅ Rutas protegidas
+✅ Formularios con validaciones
+✅ CRUD funcionando (Clientes, Servicios, Citas)
+✅ Citas con validaciones avanzadas
+✅ Reportes de ventas y comisiones
+✅ Responsive design
+✅ Sistema de errores
+✅ Manejo de carga
+✅ Interceptor JWT automático
+
+================================================================================
+📚 DOCUMENTACIÓN
+================================================================================
+
+Incluida en la carpeta:
+
+- README.md              → Descripción general
+- BLOQUE5_FRONTEND_COMPLETADO.md → Este bloque
+- GUIA_GIT_BOLT.md      → Cómo subir a Git
+- API_ENDPOINTS.md      → APIs Bloque 3
+- API_BLOQUE4.md        → APIs Bloque 4
+- src/frontend/README.md → Documentación Frontend
+
+================================================================================
+🌐 NEXT: SUBIR A GIT/BOLT
+================================================================================
+
+1. GITHUB:
+   git add .
+   git commit -m "Bloque 5: Frontend React completado"
+   git push origin main
+
+2. BOLT.NEW:
+   - Ve a bolt.new
+   - Click "Import from GitHub"
+   - Selecciona tu repositorio
+   - Bolt instala automáticamente
+   - Ejecuta npm start
+
+================================================================================
+⚠️ REQUISITOS
+================================================================================
+
+- Node.js >= 16
+- npm o yarn
+- PostgreSQL (para BD)
+- Editor (VS Code recomendado)
+
+================================================================================
+🆘 AYUDA
+================================================================================
+
+¿ERROR en frontend?
+→ Verifica que REACT_APP_API_URL apunte a http://localhost:3001/api
+
+¿ERROR en backend?
+→ Verifica DATABASE_URL y que PostgreSQL está corriendo
+
+¿Puerto en uso?
+→ npm start usa localhost:3000 para frontend y localhost:3001 para backend
+
+¿Más ayuda?
+→ Ver BLOQUE5_FRONTEND_COMPLETADO.md
+
+================================================================================
+✅ LISTO PARA EMPEZAR
+================================================================================
+
+Descargar ZIP → Extraer → npm install → npm start
+
+¡A codificar! 🚀
+
+================================================================================
